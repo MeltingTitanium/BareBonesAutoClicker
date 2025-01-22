@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bare Bones Auto-Clicker</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            min-height: 100vh;
+        }
+
+        .header {
+            background-color: #1a1a1a;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+            position: fixed;
+            width: 100%;
+            z-index: 100;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 500;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+        }
+
+        .download-button, .source-button {
+            background-color: #2ea043;
+            padding: 12px 32px;
+            border-radius: 24px;
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+        }
+
+        .download-button:hover, .source-button:hover {
+            background-color: #3fb950;
+        }
+
+        .download-button::before {
+            content: "↓";
+            font-size: 18px;
+        }
+
+        .ui-preview img {
+            max-width: 700px;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .feature-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .feature-content {
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+        }
+
+        .feature-text {
+            flex: 1;
+            font-size: 32px;
+            font-weight: 500;
+        }
+
+        .feature-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+        }
+
+        .feature-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+
+        .reversed {
+            flex-direction: row-reverse;
+        }
+
+        .open-source {
+            min-height: 50vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            text-align: center;
+            padding: 40px;
+        }
+
+        /* Animation keyframes */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .feature-section {
+            opacity: 0;
+        }
+
+        .feature-section.animate {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .feature-text.animate-left {
+            opacity: 0;
+            animation: fadeInLeft 0.8s ease forwards;
+        }
+
+        .feature-text.animate-right {
+            opacity: 0;
+            animation: fadeInRight 0.8s ease forwards;
+        }
+
+        .feature-image.animate-left {
+            opacity: 0;
+            animation: fadeInLeft 0.8s ease forwards 0.2s;
+        }
+
+        .feature-image.animate-right {
+            opacity: 0;
+            animation: fadeInRight 0.8s ease forwards 0.2s;
+        }
+
+        .open-source {
+            opacity: 0;
+        }
+
+        .open-source.animate {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        /* Smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.3
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate');
+                        
+                        // Add animations to child elements
+                        const textElements = entry.target.querySelectorAll('.feature-text');
+                        const imageElements = entry.target.querySelectorAll('.feature-image');
+                        
+                        textElements.forEach(el => {
+                            if (el.closest('.reversed')) {
+                                el.classList.add('animate-right');
+                            } else {
+                                el.classList.add('animate-left');
+                            }
+                        });
+                        
+                        imageElements.forEach(el => {
+                            if (el.closest('.reversed')) {
+                                el.classList.add('animate-left');
+                            } else {
+                                el.classList.add('animate-right');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            // Observe feature sections
+            document.querySelectorAll('.feature-section, .open-source').forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="header">
+        <h1>Bare Bones Auto-Clicker</h1>
+    </div>
+    
+    <div class="hero">
+        <div class="ui-preview">
+            <img src="https://raw.githubusercontent.com/MeltingTitanium/BareBonesAutoClicker/51837270b71646d9045561eb5cbc74a30724e851/Example.png" alt="Auto-Clicker UI Preview">
+        </div>
+        <div class="download-section">
+            <a href="https://github.com/MeltingTitanium/BareBonesAutoClicker/raw/refs/heads/main/barebones-autoclicker.exe" class="download-button" download="barebones-autoclicker.exe">Download</a>
+        </div>
+    </div>
+
+    <section class="feature-section">
+        <div class="feature-content">
+            <div class="feature-text">
+                Customizable hotkeys
+            </div>
+            <div class="feature-image">
+                <img src="https://raw.githubusercontent.com/MeltingTitanium/BareBonesAutoClicker/refs/heads/main/Example2.png" alt="Hotkeys Feature">
+            </div>
+        </div>
+    </section>
+
+    <section class="feature-section">
+        <div class="feature-content reversed">
+            <div class="feature-text">
+                Hold to Toggle and Click To Toggle modes
+            </div>
+            <div class="feature-image">
+                <img src="https://raw.githubusercontent.com/MeltingTitanium/BareBonesAutoClicker/refs/heads/main/Example3.png" alt="Toggle Modes Feature">
+            </div>
+        </div>
+    </section>
+
+    <section class="feature-section">
+        <div class="feature-content">
+            <div class="feature-text">
+                Easy to use UI
+            </div>
+            <div class="feature-image">
+                <img src="https://raw.githubusercontent.com/MeltingTitanium/BareBonesAutoClicker/refs/heads/main/Example4.png" alt="UI Feature">
+            </div>
+        </div>
+    </section>
+</body>
+</html>
