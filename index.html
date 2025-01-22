@@ -40,7 +40,6 @@
         }
 
         .download-button, .source-button {
-            background-color: #2ea043;
             padding: 12px 32px;
             border-radius: 24px;
             color: white;
@@ -54,13 +53,31 @@
             border: none;
         }
 
-        .download-button:hover, .source-button:hover {
+        .download-button {
+            background-color: #2ea043;
+        }
+
+        .source-button {
+            background-color: #2563eb;
+        }
+
+        .download-button:hover {
             background-color: #3fb950;
+        }
+
+        .source-button:hover {
+            background-color: #3b82f6;
         }
 
         .download-button::before {
             content: "↓";
             font-size: 18px;
+        }
+
+        .download-section {
+            display: flex;
+            gap: 20px;
+            align-items: center;
         }
 
         .ui-preview img {
@@ -119,7 +136,6 @@
             padding: 40px;
         }
 
-        /* Animation keyframes */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -189,7 +205,6 @@
             animation: fadeInUp 0.8s ease forwards;
         }
 
-        /* Smooth scroll behavior */
         html {
             scroll-behavior: smooth;
         }
@@ -207,7 +222,6 @@
                     if (entry.isIntersecting) {
                         entry.target.classList.add('animate');
                         
-                        // Add animations to child elements
                         const textElements = entry.target.querySelectorAll('.feature-text');
                         const imageElements = entry.target.querySelectorAll('.feature-image');
                         
@@ -230,7 +244,6 @@
                 });
             }, observerOptions);
 
-            // Observe feature sections
             document.querySelectorAll('.feature-section, .open-source').forEach(section => {
                 observer.observe(section);
             });
@@ -248,6 +261,7 @@
         </div>
         <div class="download-section">
             <a href="https://github.com/MeltingTitanium/BareBonesAutoClicker/raw/refs/heads/main/barebones-autoclicker.exe" class="download-button" download="barebones-autoclicker.exe">Download</a>
+            <a href="https://github.com/MeltingTitanium/BareBonesAutoClicker/blob/main/Code" class="source-button">Source Code</a>
         </div>
     </div>
 
