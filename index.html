@@ -136,6 +136,116 @@
             padding: 40px;
         }
 
+        .turbo-section {
+            min-height: 50vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            padding: 40px;
+            background: linear-gradient(180deg, #1a1a1a 0%, #2d0606 100%);
+        }
+
+        .turbo-button {
+            background-color: #dc2626;
+            padding: 15px 40px;
+            border-radius: 24px;
+            color: white;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(220, 38, 38, 0.3);
+        }
+
+        .turbo-button:hover {
+            background-color: #ef4444;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(220, 38, 38, 0.4);
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal {
+            background: #1f1f1f;
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transform: scale(0.95);
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .modal.show {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .modal-header {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #dc2626;
+        }
+
+        .modal-content {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+        }
+
+        .modal-button {
+            padding: 10px 25px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .modal-button.confirm {
+            background-color: #dc2626;
+            color: white;
+        }
+
+        .modal-button.cancel {
+            background-color: #374151;
+            color: white;
+        }
+
+        .modal-button:hover {
+            transform: translateY(-2px);
+        }
+
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -209,46 +319,6 @@
             scroll-behavior: smooth;
         }
     </style>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const observerOptions = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.3
-            };
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('animate');
-                        
-                        const textElements = entry.target.querySelectorAll('.feature-text');
-                        const imageElements = entry.target.querySelectorAll('.feature-image');
-                        
-                        textElements.forEach(el => {
-                            if (el.closest('.reversed')) {
-                                el.classList.add('animate-right');
-                            } else {
-                                el.classList.add('animate-left');
-                            }
-                        });
-                        
-                        imageElements.forEach(el => {
-                            if (el.closest('.reversed')) {
-                                el.classList.add('animate-left');
-                            } else {
-                                el.classList.add('animate-right');
-                            }
-                        });
-                    }
-                });
-            }, observerOptions);
-
-            document.querySelectorAll('.feature-section, .open-source').forEach(section => {
-                observer.observe(section);
-            });
-        });
-    </script>
 </head>
 <body>
     <div class="header">
@@ -297,5 +367,88 @@
             </div>
         </div>
     </section>
+
+    <section class="turbo-section">
+        <button class="turbo-button" onclick="showTurboModal()">
+            🚀 Download Turbo Mode
+        </button>
+    </section>
+
+    <div class="modal-overlay" id="turboModal">
+        <div class="modal">
+            <div class="modal-header">⚠️ Warning: Experimental Feature</div>
+            <div class="modal-content">
+                Turbo mode is an experimental unstable app. Are you sure you want to download?
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-button cancel" onclick="hideTurboModal()">No, Cancel</button>
+                <button class="modal-button confirm" onclick="downloadTurbo()">Yes, Download</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Animation Observer
+        document.addEventListener('DOMContentLoaded', function() {
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px',
+                threshold: 0.3
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate');
+                        
+                        const textElements = entry.target.querySelectorAll('.feature-text');
+                        const imageElements = entry.target.querySelectorAll('.feature-image');
+                        
+                        textElements.forEach(el => {
+                            if (el.closest('.reversed')) {
+                                el.classList.add('animate-right');
+                            } else {
+                                el.classList.add('animate-left');
+                            }
+                        });
+                        
+                        imageElements.forEach(el => {
+                            if (el.closest('.reversed')) {
+                                el.classList.add('animate-left');
+                            } else {
+                                el.classList.add('animate-right');
+                            }
+                        });
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.feature-section, .open-source').forEach(section => {
+                observer.observe(section);
+            });
+        });
+
+        // Modal Functions
+        function showTurboModal() {
+            const modal = document.getElementById('turboModal');
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                modal.querySelector('.modal').classList.add('show');
+            }, 10);
+        }
+
+        function hideTurboModal() {
+            const modal = document.getElementById('turboModal');
+            modal.querySelector('.modal').classList.remove('show');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 300);
+        }
+
+        function downloadTurbo() {
+            window.location.href = "https://download1336.mediafire.com/o092f28kv6ugTrnJWBUsthBh_ZmOS8v6noNNRdseKVTrjLUrUt7_mFI5iSBISA--Ye8VjAO-rJ-Fc7-ERDIQzbE1z4gSe9znJm82hCW3UGfysFalKMFEut5SQy6W79OlJoNwVuYFJ59DihSOfC2SkyqM_9Y15mu8gwUw5U7XZvI0QA/m0eiltc5vaqala3/turbo-auto-clicker.exe";
+            hideTurboModal();
+        }
+    </script>
 </body>
 </html>
